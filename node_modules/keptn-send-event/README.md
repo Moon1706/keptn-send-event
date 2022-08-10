@@ -31,13 +31,12 @@ const event = `{
   "type": "sh.keptn.event.develop.performance.triggered",
   "shkeptnspecversion": "0.2.3"
 }`;
-const keptnApiUrl = '';
-const keptnApiToken = '';
-
+const keptnApiUrl = "";
+const keptnApiToken = "";
 
 // Send event with Keptn API URL and token
 const getFromKube = false;
-const kubeSettings = '';
+const kubeSettings = "";
 const event = `{
   "data": {
     "project": "test",
@@ -52,8 +51,14 @@ const event = `{
   "type": "sh.keptn.event.develop.performance.triggered",
   "shkeptnspecversion": "0.2.3"
 }`;
-const keptnApiUrl = 'http://example.nip.io/api/v1/event';
-const keptnApiToken = 'XXXXXXXXXXXXXXXXXXXXXXXXXXX';
+const keptnApiUrl = "http://example.nip.io/api/v1/event";
+const keptnApiToken = "XXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
-const response = main(getFromKube, keptnApiUrl, keptnApiToken, kubeSettings, event);
+const response = main(
+  getFromKube,
+  keptnApiUrl,
+  keptnApiToken,
+  kubeSettings,
+  event
+);
 ```
