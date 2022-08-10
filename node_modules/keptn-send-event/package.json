@@ -1,6 +1,6 @@
 {
   "name": "keptn-send-event",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "license": "MIT",
   "author": "Mikita Sharayeu <nick.moon.1705@gmail.com>",
   "repository": {
@@ -23,10 +23,11 @@
   ],
   "dependencies": {
     "@kubernetes/client-node": "^0.17.0",
+    "@types/node-fetch": "^2.6.2",
     "@types/tar": "^6.1.2",
     "js-base64": "^3.7.2",
     "js-yaml": "^4.1.0",
-    "node-fetch": "^3.2.10"
+    "node-fetch": "^2.6.7"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.5",
