@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 export function sendEvent(url: string, token: string, event: string): any {
     return fetch(url, {
         method: 'post',
