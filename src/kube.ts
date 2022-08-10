@@ -19,6 +19,7 @@ export async function sendKubeEvent(kubeSettings: string, event: string) {
             const data = res.body.data as any;
             return decode(data[kubeConnect.secret]);
         });
+    console.log('Got token.');
 
     // Get Pod name from service
     const podName = await k8sApi
@@ -30,6 +31,7 @@ export async function sendKubeEvent(kubeSettings: string, event: string) {
                     new RegExp(kubeConnect.service, 'i').test(name as string)
                 )[0];
         });
+    console.log(`Pod name for port-forwarding: ${podName}.`);
 
     // Start port forwarding
     const hostname = 'localhost';
@@ -46,6 +48,7 @@ export async function sendKubeEvent(kubeSettings: string, event: string) {
     });
     try {
         await server.listen(port, hostname);
+        console.log('Up server.');
     } catch (error) {
         throw new Error(`Error with start net server! ${error}`);
     }
@@ -56,12 +59,14 @@ export async function sendKubeEvent(kubeSettings: string, event: string) {
         token,
         event
     );
+    console.log('Sent event.');
 
     // Stop port forwarding
     try {
         await server.close(function () {
             server.unref();
         });
+        console.log('Stop server.');
     } catch (error) {
         throw new Error(`Error with stop net server! ${error}`);
     }
