@@ -1,6 +1,6 @@
 {
   "name": "keptn-send-event",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "MIT",
   "author": "Mikita Sharayeu <nick.moon.1705@gmail.com>",
   "repository": {
@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "@actions/core": "^1.9.0",
-    "keptn-send-event": "1.0.2"
+    "keptn-send-event": "1.0.3"
   },
   "devDependencies": {
     "escape-string-regexp": "^5.0.0",
