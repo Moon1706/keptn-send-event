@@ -1,0 +1,29 @@
+name: "Send event to Keptn cluster"
+description: "Send event to Keptn in a GitHub Actions build environment"
+author: "Moon1706"
+inputs:
+  get-from-kube:
+    description: "Get URL and token from Kubernetes with port forwarding."
+    required: true
+    default: false
+  keptn-api-url:
+    description: "URL pointing to the keptn events API."
+    required: true
+    default: ""
+  keptn-api-token:
+    description: "API Token to be used for sending the event."
+    required: true
+    default: ""
+  kube-settings:
+    description: "Basic Kubernetes connection settings."
+    required: false
+    default: "{'namespace': 'keptn', 'secret': 'keptn-api-token', 'service': 'api-gateway-nginx'}"
+  event:
+    description: "Keptn event type to send."
+    required: true
+branding:
+  icon: "terminal"
+  color: "purple"
+runs:
+  using: "node16"
+  main: "dist/index.js"
