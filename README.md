@@ -85,6 +85,7 @@ jobs:
       
       # Send event to defalut Kubernetes cluster
       - name: "Send event"
+        id: send-keptn-event
         uses: Moon1706/keptn-send-event@v1
         with:
           get-from-kube: true
@@ -108,6 +109,8 @@ jobs:
               "type": "sh.keptn.event.develop.performance.triggered",
               "shkeptnspecversion": "0.2.3"
             }
+      - name: Print the Keptn Context
+        run: echo "The keptn context is ${{ steps.send-keptn-event.outputs.keptnContext }}"
 ```
 
 ## Configuration
