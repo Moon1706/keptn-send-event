@@ -9,14 +9,22 @@ Send event to Keptn in Kubernetes cluster.
 #### Example
 
 ```js
-import { main } from "keptn-send-event";
+import { send } from "keptn-send-event";
 
-// Send event with the Kube connection
-const getFromKube = true;
-const kubeSettings = `
-namespace: keptn
-secret: keptn-api-token
-service: api-gateway-nginx`;
+// If you select this section will use port-forwarding and Keptn API token will get from K8s secrets
+const kubeSettings = `{
+  "enabled": true,
+  "namespace": "keptn",
+  "secret": "keptn-api-token",
+  "service": "api-gateway-nginx"
+}`;
+
+// If you have public Keptn URL and `enabled = false` please fill these settings
+const keptnAuth = `{
+  "keptnURL": "",
+  "token": ""
+}`;
+
 const event = `{
   "data": {
     "project": "test",
@@ -31,34 +39,6 @@ const event = `{
   "type": "sh.keptn.event.develop.performance.triggered",
   "shkeptnspecversion": "0.2.3"
 }`;
-const keptnApiUrl = "";
-const keptnApiToken = "";
 
-// Send event with Keptn API URL and token
-const getFromKube = false;
-const kubeSettings = "";
-const event = `{
-  "data": {
-    "project": "test",
-    "stage": "develop",
-    "service": "k6",
-    "message": "",
-    "status": "",
-    "result": ""
-  },
-  "source": "gh",
-  "specversion": "1.0",
-  "type": "sh.keptn.event.develop.performance.triggered",
-  "shkeptnspecversion": "0.2.3"
-}`;
-const keptnApiUrl = "http://example.nip.io/api/v1/event";
-const keptnApiToken = "XXXXXXXXXXXXXXXXXXXXXXXXXXX";
-
-const response = main(
-  getFromKube,
-  keptnApiUrl,
-  keptnApiToken,
-  kubeSettings,
-  event
-);
+const keptnContext = send(event, keptnAuth, kubeSettings);
 ```

@@ -1,6 +1,6 @@
 {
   "name": "keptn-send-event",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "license": "MIT",
   "author": "Mikita Sharayeu <nick.moon.1705@gmail.com>",
   "repository": {
@@ -10,8 +10,8 @@
   "description": "This module used for sending events to Keptn projects.",
   "main": "dist/index.js",
   "scripts": {
-    "default": "npm install && npm run clean && npm run build",
-    "clean": "shx rm -rf dist",
+    "default": "npm run clean && npm install && npm run build",
+    "clean": "rm -rf dist node_modules package-lock.json",
     "build": "tsc"
   },
   "keywords": [
@@ -20,12 +20,11 @@
   ],
   "dependencies": {
     "@actions/core": "^1.9.0",
-    "keptn-send-event": "1.0.0"
+    "keptn-send-event": "2.0.0"
   },
   "devDependencies": {
     "escape-string-regexp": "^5.0.0",
     "semver": "^7.3.5",
-    "shx": "^0.3.3",
     "ts-node": "^10.8.1",
     "typescript": "^4.7.4"
   },
