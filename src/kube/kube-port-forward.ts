@@ -1,25 +1,26 @@
-import { KubeConnect } from './types';
-import { load } from 'js-yaml';
+import { KubeConnect } from '../types/kube-config';
+import { Auth } from '../types/auth';
 import { decode } from 'js-base64';
 import * as k8s from '@kubernetes/client-node';
 import * as net from 'net';
-import { sendEvent } from './fetch';
+import { sendEvent } from '../event';
 
-export async function sendKubeEvent(kubeSettings: string, event: string) {
-    const kubeConnect = load(kubeSettings) as KubeConnect;
+export async function kubeUpdateService(kubeConnect: KubeConnect, event: any) {
     const kc = new k8s.KubeConfig();
     kc.loadFromDefault();
     const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
     const forward = new k8s.PortForward(kc);
 
-    // Get Keptn Api token
+    // Get Keptn API token
     const token = await k8sApi
         .readNamespacedSecret(kubeConnect.secret, kubeConnect.namespace)
         .then((res) => {
             const data = res.body.data as any;
             return decode(data[kubeConnect.secret]);
         });
-    console.log('Got token.');
+    console.log(
+        `KUBE: Got Keptn API token from secret (***${token.slice(-2)})`
+    );
 
     // Get Pod name from service
     const podName = await k8sApi
@@ -31,7 +32,10 @@ export async function sendKubeEvent(kubeSettings: string, event: string) {
                     new RegExp(kubeConnect.service, 'i').test(name as string)
                 )[0];
         });
-    console.log(`Pod name for port-forwarding: ${podName}.`);
+    console.log(
+        `KUBE: Service name for port-forwarding: ${kubeConnect.service}`
+    );
+    console.log(`KUBE: Pod name for port-forwarding: ${podName}.`);
 
     // Start port forwarding
     const hostname = 'localhost';
@@ -47,29 +51,28 @@ export async function sendKubeEvent(kubeSettings: string, event: string) {
         );
     });
     try {
-        await server.listen(port, hostname);
-        console.log('Up server.');
+        server.listen(port, hostname);
+        console.log('KUBE: Up net server.');
     } catch (error) {
-        throw new Error(`Error with start net server! ${error}`);
+        throw new Error(`KUBE: Error with start net server! ${error}`);
     }
 
-    // Send request
-    const response = await sendEvent(
-        `http://${hostname}:${port}/api/v1/event`,
-        token,
+    // Update service
+    const sleepTime = 2;
+    console.log(`KUBE: Waiting... Sleep time: ${sleepTime} sec.`);
+    await new Promise((r) => setTimeout(r, sleepTime * 1000));
+    await sendEvent(
+        { keptnURL: `http://${hostname}:${port}`, token: token } as Auth,
         event
     );
-    console.log('Sent event.');
 
     // Stop port forwarding
     try {
-        await server.close(function () {
+        server.close(function () {
             server.unref();
         });
-        console.log('Stop server.');
+        console.log('KUBE: Stop server.');
     } catch (error) {
-        throw new Error(`Error with stop net server! ${error}`);
+        throw new Error(`KUBE: Error with stop net server! ${error}`);
     }
-
-    return response;
 }
